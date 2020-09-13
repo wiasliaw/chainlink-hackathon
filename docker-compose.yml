@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  chainlink:
+    image: smartcontract/chainlink
+    restart: always
+    links:
+      - postgres
+      - geth
+    env_file:
+      - ./chainlink-ropsten/.env
+    ports:
+      - "6688:6688"
+
+  geth:
+    image: ethereum/client-go:latest
+    restart: always
+    ports:
+      - "8546:8546"
+    command: "--testnet --ipcdisable --ws --wsaddr 0.0.0.0 --wsorigins='*'"
+
+  postgres:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./postgres/.env
